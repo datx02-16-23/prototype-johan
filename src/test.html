@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <script src="./d3.min.js"></script>
+    <script>
+      var data = [4, 8, 15, 16, 23, 42];
+
+      function update() {
+        var barUpdate = d3.select(".chart").selectAll("div").data(data);
+
+        var barEnter  = barUpdate.enter().append("div");
+
+        var x = d3.scale.linear()
+          .domain([0, d3.max(data)])
+          .range([0, 1000]);
+
+        barUpdate.style("width", 
+          function(d) {
+            var width = x(d) + "px";
+            return width;
+          }  
+        );
+        barUpdate.text(
+          function(d) {
+            return d;
+          }
+        );
+      }
+
+      var current = "white";
+      var next    = 50;
+      function black() {
+        // begin clause
+        d3.select("body").
+          transition().duration(1750).
+          style("background-color",
+            function() {
+              if (current == "white") {
+                current = "green";
+                return "green";
+              } else {
+                current = "white";
+                return "white";
+              }
+            }
+          );
+        // end clause
+        data.push(next);
+        next += 10;
+        update();
+      }
+    </script>
+    <style>
+      body {
+        background-color: white;
+      }
+
+      .chart div {
+        font: 10px sans-serif;
+        background-color: steelblue;
+        text-align: right;
+        padding: 3px;
+        margin: 1px;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="chart" onClick="black()"></div>
+    
+    <script type="text/javascript">update();</script>
+  </body>
+</html>
