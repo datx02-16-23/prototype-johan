@@ -3,7 +3,7 @@
 Tool used is d3.js
 
 ## Pros
-* test
+* Strongly connected to data structures (vector tested so far)
 
 ## Cons
-* test
+* Relies heavily on html compontents such as css/svg/javascript
