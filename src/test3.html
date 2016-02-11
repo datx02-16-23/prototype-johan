@@ -1,0 +1,114 @@
+<html>
+  <meta charset="utf-8">
+  <script src="./d3.min.js"></script>
+  <script>
+    var svg   = null;
+
+    function setup() {
+      var width = 960,
+          height = 500;
+
+      svg = d3.select("body")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .attr("transform", "translate (" + 32 + "," + height/2 + ")");
+    }
+
+    function update(data, time) {
+
+      // DATA JOIN
+      // Join new data with old elements, if any.
+      var text = svg.selectAll("text")
+          .data(data, function(d) { return d; });
+
+      // UPDATE
+      // Update old elements as needed.
+      text.attr("class", "update");
+
+      // ENTER
+      // Create new elements as needed.
+      text.enter()
+          .append("text")
+          .attr("class", "enter");
+
+      // ENTER + UPDATE
+      // Appending to the enter selection expands the update selection to include
+      // entering elements; so, operations on the update selection after appending to
+      // the enter selection will apply to both entering and updating nodes.
+      text
+        .transition().duration(time)
+        .attr("x", function(d, i) { return i * 64; })
+        .text(function(d) { return d; });
+
+      // EXIT
+      // Remove old elements as needed.
+      text.exit().remove();
+    }
+
+    // Grab a random sample of letters from the alphabet, in alphabetical order.
+    // setInterval(function() {
+    //   update(d3.shuffle(alphabet)
+    //       .slice(0, Math.floor(Math.random() * 26))
+    //       .sort());
+    // }, 1500);
+
+  </script>
+  <style>
+
+  text {
+    font: bold 32px monospace;
+  }
+
+  .enter text {
+    color: green;
+  }
+
+  .update text {
+    color: #993;
+  }
+
+  </style>
+  <body>
+    <button onclick="sort()">hello</button>
+
+    <script type="text/javascript">
+
+    // create steps
+    function createSteps(vector) {
+      
+    }
+
+    function step(vector, i) {
+      
+    }
+
+    var data = null;
+
+    function swap(i, j) {
+      var tmp = data[i];
+      data[i] = data[j];
+      data[j] = tmp;
+    }
+
+    var i = 0;
+    var steps = [[0,1],[1,2],[0,1]];
+
+    function sort() {
+      if ( i >= steps.length ) return;
+
+      swap(steps[i][0], steps[i][1]);
+      update(data, 1500);
+
+      i++;
+    }
+
+    // initial setup
+    setup();
+    data = [4,2,1];
+    update(data, 0);
+
+    </script>
+  </body>
+</html>

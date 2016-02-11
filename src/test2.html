@@ -10,6 +10,29 @@
         return d3.scale.linear().domain([0, d3.max(data)]).range([0,height]);
       }
 
+      function swapData(i, j) {
+        var tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+      }
+
+      function swapBars(i, j) {
+
+        var bars = d3.select(".chart").selectAll("g");
+        
+        // var bars = d3.select(".chart").selectAll("g");
+        // bars.each(function(d,n) {
+        //   var selection = d3.select(this);
+        //   if ( n == i ) {
+        //     selection.transition()
+        //       .attr("transform", "translate (" + barWidth * j + ",0)");
+        //   } else if (n == j) {
+        //     selection.transition()
+        //       .attr("transform", "translate (" + barWidth * i + ",0)");
+        //   }
+        // });
+      }
+
       function appendToSelection(selection) {
         selection.append("rect")
           .attr("height", 0)
@@ -41,7 +64,9 @@
       }
 
       var val = 50;
+      var swap = true;
       function update() {
+        data.push(val++);
         data.push(val++);
 
         var x = d3.scale.linear().domain([0, d3.max(data)]).range([0,height]);
@@ -55,12 +80,17 @@
 
         var enterGroupSelection = bar.enter().append("g");
 
-        enterGroupSelection.attr("transform", 0).transition().attr("transform", function(d,i) {
-          window.alert(d + " " + i);
+        enterGroupSelection.attr("transform", function(d,i) {
           return "translate(" + i * barWidth + ",0)";
         });
 
         appendToSelection(enterGroupSelection);
+
+        if (swap)
+          swapBars(1,2);
+        else
+          swapBars(2,1);
+        swap = !swap;
 
         bar.select("rect").attr("height", 0).attr("height", getX());
         bar.select("text").attr("y", function(d) { return x(d) - 3; });
