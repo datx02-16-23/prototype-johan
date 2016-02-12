@@ -3,69 +3,98 @@
   <script src="./d3.min.js"></script>
   <script>
     var svg   = null;
+    var keyf  = function(d) { return d.value; }
 
-    function setup() {
+    function setupEnter(selection) {
+      selection
+        .append("rect")
+        .attr("width", 64)
+        .attr("height", 64);
+
+      selection
+        .append("text")
+        .attr("x", 32)
+        .attr("dx", "-.35em")
+        .attr("y", 32)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.value; });
+    }
+
+    function setup(data) {
       var width = 960,
-          height = 500;
+          height = 200;
 
       svg = d3.select("body")
           .append("svg")
           .attr("width", width)
-          .attr("height", height)
-          .append("g")
-          .attr("transform", "translate (" + 32 + "," + height/2 + ")");
+          .attr("height", height);
+
+      var group = svg.selectAll("g").data(data, keyf);
+
+      var groups = group.enter().append("g")
+        .attr("transform", function(d, i) {
+          return "translate (" + i * 65 + ",0)";
+        });
+
+      setupEnter(group); 
     }
 
     function update(data, time) {
 
       // DATA JOIN
       // Join new data with old elements, if any.
-      var text = svg.selectAll("text")
-          .data(data, function(d) { return d; });
+      var groups = svg.selectAll("g").data(data, keyf);
 
       // UPDATE
       // Update old elements as needed.
-      text
-        .attr("class", "update");
+      groups.attr("class", "update")
+      groups.select("rect").style("fill", function(d) {
+        if (d.swap) {
+          return "green";
+        } else {
+          return "steelblue";
+        }
+      });
 
       // ENTER
       // Create new elements as needed.
-      text.enter()
-          .append("text")
-          .attr("class", "enter");
+      var enterSelection = groups.enter().append("g");
+      enterSelection.attr("class", "enter");
+      setupEnter(enterSelection);
 
       // ENTER + UPDATE
       // Appending to the enter selection expands the update selection to include
       // entering elements; so, operations on the update selection after appending to
       // the enter selection will apply to both entering and updating nodes.
-      text
+      groups
         .transition().duration(time)
-        .attr("x", function(d, i) { return i * 64; })
-        .text(function(d) { return d; });
+        .attr("transform", function(d, i) {
+          return "translate (" + i * 65 + ",0)";
+        });
+      groups.select("text")
+        .text(function(d) { return d.value;});
+
+      groups.attr("class", "none");
 
       // EXIT
       // Remove old elements as needed.
-      text.exit().remove();
+      groups.exit().remove();
     }
 
   </script>
   <style>
 
-  text {
-    font: bold 32px monospace;
-  }
+    g rect {
+      fill: steelblue;
+    }
 
-  .enter text {
-    color: green;
-  }
-
-  .update text {
-    color: #993;
-  }
-
+    g text {
+      fill: black;
+      font: 30px sans-serif;
+    }
   </style>
   <body>
-    <button onclick="sort()">hello</button>
+    <button onclick="step()">step</button>
 
     <script type="text/javascript">
 
@@ -98,20 +127,34 @@
     var data = null;
     var i = 0;
 
-    function sort() {
+    function step() {
       if ( i >= steps.length ) return;
       
-      swap(steps[i][0], steps[i][1], data);
+      var i0 = steps[i][0];
+      var i1 = steps[i][1];
+
+      swap(i0, i1, data);
+
+      data[i0].swap = true;
+      data[i1].swap = true;
+
       update(data, 500);
+
+      data[i0].swap = false;
+      data[i1].swap = false;
 
       i++;
     }
 
     // initial setup
-    setup();
-    data = [134,35,67,2,77,11,90,7];
-    steps = createSteps(data.slice());
-    update(data, 0);
+    data = [];
+    vector = [4,5,6,3,1,2];
+    for (j = 0; j < vector.length; j++) {
+      data.push({"value" : vector[j],
+                 "swap"  : false});
+    }
+    setup(data);
+    steps = createSteps(vector.slice());
 
     </script>
   </body>
