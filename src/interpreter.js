@@ -1,6 +1,7 @@
 
 /////////////////////////////////////////////////
-// swap - returns vector with indices of swap
+// swap - 
+//    returns vector with indices of swap
 /////////////////////////////////////////////////
 function swap(x, y, data) {
   var tmp = data[x];
@@ -10,8 +11,9 @@ function swap(x, y, data) {
 }
 
 /////////////////////////////////////////////////
-// createSteps - returns the swaps preformed by 
-//               sorting algorithm
+// createSteps - 
+//    returns the swaps preformed by sorting 
+//    algorithm.
 /////////////////////////////////////////////////
 function createSteps(vector) {
   var stepsBuffer = [];
@@ -32,14 +34,15 @@ function createSteps(vector) {
 }
 
 /////////////////////////////////////////////////
-// Locals
+// locals
 /////////////////////////////////////////////////
 var steps = [];
 var data = null;
 var i = 0;
 
 /////////////////////////////////////////////////
-// step - take one step of preformed algorithm
+// step - 
+//    take one step of preformed algorithm
 /////////////////////////////////////////////////
 function step() {
   if ( i >= steps.length ) return;
@@ -58,4 +61,27 @@ function step() {
   data[i1].swap = false;
 
   i++;
+}
+
+/////////////////////////////////////////////////
+// back - 
+//    take one step back in preformed algorithm
+/////////////////////////////////////////////////
+function back() {
+  if ( i <= 0 ) return;
+  
+  i--;
+
+  var i0 = steps[i][0];
+  var i1 = steps[i][1];
+
+  swap(i0, i1, data);
+
+  data[i0].swap = true;
+  data[i1].swap = true;
+
+  update(data, 500);
+
+  data[i0].swap = false;
+  data[i1].swap = false;
 }
