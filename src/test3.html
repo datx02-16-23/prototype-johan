@@ -75,26 +75,34 @@
 
     <script type="text/javascript">
 
-    // create steps
-    function createSteps(vector) {
-      
+    function swap(x, y, vector) {
+      var tmp = vector[x];
+      vector[x] = vector[y];
+      vector[y] = tmp;
     }
 
-    var data = null;
-
-    function swap(i, j) {
-      var tmp = data[i];
-      data[i] = data[j];
-      data[j] = tmp;
+    // create steps
+    function createSteps(vector) {
+      var stepsBuffer = [];
+      for (j = 0; j < vector.length; j++) {
+        for (k = 0; k < vector.length - 1; k++) {
+          if (vector[k] > vector[k+1]) {
+            swap(k,k+1,vector);
+            stepsBuffer.push([k,k+1]);
+          }
+        }
+      }
+      return stepsBuffer;
     }
 
     var i = 0;
-    var steps = [[0,1],[1,2],[0,1]];
+    var steps = null;
+    var data = null;
 
     function sort() {
       if ( i >= steps.length ) return;
 
-      swap(steps[i][0], steps[i][1]);
+      swap(steps[i][0], steps[i][1], data);
       update(data, 1500);
 
       i++;
@@ -104,6 +112,7 @@
     setup();
     data = [4,2,5,3,1];
     update(data, 0);
+    steps = createSteps(data.slice());
 
     </script>
   </body>
