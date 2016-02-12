@@ -25,7 +25,8 @@
 
       // UPDATE
       // Update old elements as needed.
-      text.attr("class", "update");
+      text
+        .attr("class", "update");
 
       // ENTER
       // Create new elements as needed.
@@ -46,13 +47,6 @@
       // Remove old elements as needed.
       text.exit().remove();
     }
-
-    // Grab a random sample of letters from the alphabet, in alphabetical order.
-    // setInterval(function() {
-    //   update(d3.shuffle(alphabet)
-    //       .slice(0, Math.floor(Math.random() * 26))
-    //       .sort());
-    // }, 1500);
 
   </script>
   <style>
@@ -75,38 +69,48 @@
 
     <script type="text/javascript">
 
-    // create steps
+    function swap(x, y, data) {
+      var tmp = data[x];
+      data[x] = data[y];
+      data[y] = tmp;
+      return [x,y];
+    }
+
     function createSteps(vector) {
-      
+      var stepsBuffer = [];
+      var partition = 0;
+      for (j = 0; j < vector.length; j++) {
+        
+        var x = vector[j];
+        var k = j - 1;
+        while (k >= 0 && x < vector[k]) {
+          k--;
+        }
+
+        for (n = j; n > k + 1; n--) {
+          stepsBuffer.push(swap(n,n-1,vector));
+        }
+      }
+      return stepsBuffer;
     }
 
-    function step(vector, i) {
-      
-    }
-
+    var steps = [];
     var data = null;
-
-    function swap(i, j) {
-      var tmp = data[i];
-      data[i] = data[j];
-      data[j] = tmp;
-    }
-
     var i = 0;
-    var steps = [[0,1],[1,2],[0,1]];
 
     function sort() {
       if ( i >= steps.length ) return;
-
-      swap(steps[i][0], steps[i][1]);
-      update(data, 1500);
+      
+      swap(steps[i][0], steps[i][1], data);
+      update(data, 500);
 
       i++;
     }
 
     // initial setup
     setup();
-    data = [4,2,1];
+    data = [134,35,67,2,77,11,90,7];
+    steps = createSteps(data.slice());
     update(data, 0);
 
     </script>
