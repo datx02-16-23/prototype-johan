@@ -17,19 +17,28 @@
   </style>
 
   <body>
+    <p>
+    
+    </p>
     <button onclick="step()">step</button>
     <button onclick="back()">back</button>
+    <select id="dropdown">
+      <option>Boxes</option>
+      <option>Bars</option>
+    </select>
 
     <script>
       // initial setup
       data = [];
-      vector = [4,5,6,3,1,2];
+      vector = [4,5,6,3,1,1,2];
       for (j = 0; j < vector.length; j++) {
-        data.push({"value" : vector[j],
-                   "swap"  : false});
+        data.push({"value"  : vector[j],
+                   "swap"   : false,
+                   "id"     : vector[j] + " " + j});
       }
       setup(data);
       steps = createSteps(vector.slice());
+      d3.select("p").text(getName());
   </script>
   </body>
 </html>

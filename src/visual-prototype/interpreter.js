@@ -1,4 +1,7 @@
 
+function getName() {
+  return "Insertion Sort";
+}
 /////////////////////////////////////////////////
 // swap - 
 //    returns vector with indices of swap
