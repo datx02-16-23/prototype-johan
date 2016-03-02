@@ -1,0 +1,45 @@
+{	
+	"datastructures" : {
+		"a" : {
+			"type"		: "array",
+			"content" 	: [1,2,3]
+		},
+
+		"tmp" : {
+			"type"		: "variable",
+			"content"	: null
+		}
+	},
+
+	"operations" : [
+		{
+			"id" 	: "write",
+			"to" 	: {"id" : "tmp"},
+			"from"	: {"id" : "a", "index" : 0}
+		},
+
+		{
+			"id" 	: "write",
+			"to" 	: {"id" : "tmp"},
+			"from"	: {"id" : "a", "index" : 0}
+		},
+
+		{
+			"id" 	: "write",
+			"to" 	: {"id" : "a", "index" : 0},
+			"from"	: {"id" : "a", "index" : 2}
+		},
+
+		{
+			"id" 	: "write",
+			"to" 	: {"id" : "a", "index" : 2},
+			"from"	: {"id" : "tmp"}
+		},
+
+		{
+			"id" 	: "write",
+			"to" 	: {"id" : "a", "index" : 0},
+			"from"	: {"id" : "tmp"}
+		}
+	]
+}
