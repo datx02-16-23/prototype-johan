@@ -11,8 +11,8 @@ buffer = {
 from json import dump
 outfile = open('output.json', 'wb')
 
-def watch(original_function):
-	buffer["datastructures"].append(original_function())
+def watch(data):
+	buffer["datastructures"].append(data)
 
 def read(src):
 	pass

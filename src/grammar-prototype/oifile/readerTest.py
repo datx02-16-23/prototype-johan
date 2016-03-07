@@ -1,9 +1,8 @@
-from reader import *
+from reader import watch
 
-@watch
-def watchVector(): return {"id" : "a", "datatype" : "VECTOR"}
+watch({"id" : "a", "datatype" : "VECTOR"})
 a = [1,2,3]
 @init
-def initVector(): return {"id" : "a", "value" : a}
+def asd(): return {"id" : "a", "value" : a}
 
 done()
